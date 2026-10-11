@@ -1,0 +1,8 @@
+# Snakemake 7 profile: run all rules on the current machine.
+# Set `cores` / `resources` to what the machine has.
+cores: 4
+resources:
+  - mem_mb=32000
+rerun-incomplete: true
+keep-going: false
+printshellcmds: true

@@ -1,0 +1,53 @@
+# Conda environment for scDepBrain-Fusion.
+#   conda env create -f envs/environment.yml      (mamba is much faster)
+#   conda activate scdepbrain-fusion
+#   Rscript envs/install_R_packages.R             (scPagwas + archived deps)
+# Versions match the environment the pipeline was developed and tested with.
+name: scdepbrain-fusion
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.10
+  - snakemake-minimal=7.32.4
+  - pulp<2.8
+  - numpy=2.0
+  - pandas=2.2
+  - scipy=1.14
+  - h5py=3.11
+  - anndata=0.11
+  - scanpy=1.10
+  - statsmodels=0.14
+  - matplotlib=3.9
+  - pyyaml
+  - pip
+  - pip:
+      - scdrs==1.0.2
+  # R
+  - r-base=4.3
+  - r-seurat=5
+  - r-seuratobject=5
+  - r-matrix
+  - r-data.table
+  - r-hdf5r
+  - r-bigreadr
+  - r-bigstatsr
+  - r-biganalytics
+  - r-bigmemory
+  - r-irlba
+  - r-glmnet
+  - r-rhpcblasctl
+  - r-remotes
+  - r-ggplot2
+  - r-ggpubr
+  - r-ggsci
+  - r-ggthemes
+  - r-ggtext
+  - r-dplyr
+  - r-reshape2
+  - r-reshape
+  - r-rmtstat
+  - r-gridextra
+  - r-rcpp
+  - bioconductor-genomicranges
+  - bioconductor-iranges

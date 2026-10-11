@@ -1,0 +1,12 @@
+# TOTAL_GENES = 17579
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar)
+# CONDITIONED_INTERNAL = gene size, gene density, sample size, inverse mac, log(gene size), log(gene density), log(sample size), log(inverse mac)
+VARIABLE                TYPE  NGENES         BETA     BETA_STD           SE            P
+Astrocytes             COVAR   17579   0.00038664   4.6049e-05     0.071419      0.99568
+Endothelial_cells      COVAR   17579    -0.089721    -0.012454     0.060743      0.13968
+Excitatory_neurons     COVAR   17579    -0.046154   -0.0074419      0.05506      0.40191
+Inhibitory_neurons     COVAR   17579   -0.0089959   -0.0010536     0.072052      0.90064
+Microglia              COVAR   17579     -0.10852    -0.017055     0.054323     0.045776
+Oligodendrocytes       COVAR   17579     0.094934     0.010886        0.074      0.19956
+OPCs                   COVAR   17579      0.12491     0.013089      0.08097      0.12294
+Purkinje_neurons       COVAR   17579      0.34022     0.034638     0.084092   5.2462e-05

@@ -1,0 +1,24 @@
+# TOTAL_GENES = 17579
+# TEST_DIRECTION = one-sided, positive (set), two-sided (covar)
+# CONDITIONED_INTERNAL = gene size, gene density, sample size, inverse mac, log(gene size), log(gene density), log(sample size), log(inverse mac)
+VARIABLE               TYPE  NGENES         BETA     BETA_STD           SE            P
+Astrocytes            COVAR   17579     -0.08595   -0.0063321       0.1154      0.45641
+Endothelial_cells     COVAR   17579     -0.25828    -0.023398     0.093121    0.0055529
+Ex_mix                COVAR   17579      0.41827     0.018598      0.19193     0.029329
+Ex_L2_3               COVAR   17579      0.24702     0.010182      0.21144      0.24272
+Ex_L2_4               COVAR   17579      0.55233     0.023536      0.20407    0.0068075
+Ex_L4_6               COVAR   17579      0.30278      0.01317      0.19535      0.12118
+Ex_L5                 COVAR   17579      0.03593    0.0016631      0.18053      0.84224
+Ex_L5_6               COVAR   17579      -0.1336   -0.0061449      0.18841      0.47827
+Ex_L6                 COVAR   17579      0.25379     0.011695      0.18519      0.17056
+Ex_NRGN               COVAR   17579      0.46553     0.020944      0.18948     0.014025
+In_CALM1              COVAR   17579      0.13717     0.006777      0.17472      0.43243
+In_LAMP5              COVAR   17579      0.20098     0.009107      0.18994      0.29003
+In_PVALB              COVAR   17579      0.43141     0.018223      0.19607     0.027804
+In_SHANK2             COVAR   17579     0.073687    0.0040372      0.15019      0.62369
+In_SST                COVAR   17579      0.18983    0.0085811      0.19093      0.32013
+In_VIP                COVAR   17579      0.36449      0.01559      0.20721     0.078596
+Microglia             COVAR   17579     -0.18591    -0.020655     0.077076      0.01588
+Oligodendrocytes      COVAR   17579     0.037279    0.0025356      0.12347      0.76271
+OPCs                  COVAR   17579     0.026005    0.0015362      0.14425      0.85694
+Purkinje_neurons      COVAR   17579      0.64126     0.029029       0.1909   0.00078416

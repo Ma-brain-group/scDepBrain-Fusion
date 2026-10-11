@@ -1,0 +1,20 @@
+# Snakemake state and run outputs
+.snakemake/
+results/
+logs/
+# Large / third-party inputs (download separately, see README)
+example/data/gwas/*
+!example/data/gwas/README.md
+# Intermediate files
+*.RData
+*.h5ad
+*.h5
+temp_*/
+.Rhistory
+__pycache__/
+*.pyc
+example/build/test_logs/
+example/build/*.log
+example/data/example_brain_2k.rds
+references/*
+!references/README.md

@@ -1,0 +1,185 @@
+# =====================================================================
+# scDepBrain-Fusion — DEMO configuration (all four methods)
+#
+# ~8,000 human brain nuclei (8 cell types / 20 subtypes) x PGC MDD 2025 EUR GWAS.
+# Before running: download the GWAS and the references (README "Demo",
+# docs/references.md), then
+#   bash run_pipeline.sh config/config_example.yaml local
+# NOTE: scPagwas needs >= ~20,000 cells for stable results; the demo checks the
+# workflow (scDRS / MAGMA / LDSC already work at this size).
+# =====================================================================
+
+# Which optional methods to run (scPagwas and scDRS always run).
+#   magma : MAGMA gene-property analysis (needs the MAGMA binary, gene.loc, .genes.raw)
+#   ldsc  : S-LDSC / LDSC-SEG (needs the LDSC software + 1000G / baselineLD references)
+methods:
+  magma: true
+  ldsc: true
+
+# All outputs are written under this folder.
+outdir: results/demo
+
+# Optional shell snippet run at the start of every job, e.g. to activate the
+# conda env on cluster nodes. Leave "" if the env is already active.
+env_activate: ""
+# env_activate: "source ~/miniconda3/etc/profile.d/conda.sh && conda activate scdepbrain-fusion"
+
+# ---------------------------------------------------------------------
+# 1. Single-cell input: Seurat object (.rds, Seurat v4 or v5)
+# ---------------------------------------------------------------------
+single_cell:
+  rds: example/data/example_brain_8k.rds
+  assay: RNA
+  # The `counts` layer must hold RAW integer counts (used by scDRS; checked).
+  # scPagwas uses the log-normalised `data` layer. Set run_normalize: true
+  # if `data` is empty or equal to counts -> NormalizeData() (LogNormalize).
+  run_normalize: true     # demo object ships raw counts only
+  # Main cell-type column (meta.data). Used as Idents() for scPagwas and for
+  # the scPagwas cell-type regression + bootstrap.
+  celltype_col: anno       # 8 major cell types
+  # All annotation columns to test (scPagwas Merge_celltype_p and scDRS
+  # group analysis). Must include celltype_col.
+  group_cols: [anno, final_anno]   # + 20 subtypes
+  # Extra meta.data columns copied into the scDRS h5ad (missing ones skipped).
+  keep_meta: [nCount_RNA, nFeature_RNA]
+
+# ---------------------------------------------------------------------
+# 2. Traits: one entry per GWAS. The key is the trait name used in all
+#    output file names (letters, digits and underscores only).
+# ---------------------------------------------------------------------
+traits:
+  MDD_EUR:   # PGC MDD 2025, European ancestry, excluding 23andMe (GRCh37)
+    sumstats: example/data/gwas/pgc-mdd2025_no23andMe_eur_v3-49-24-11.tsv.gz
+    magma_genes: example/data/magma/MDD_EUR_PGC2025.genes.out
+    magma_genes_raw: example/data/magma/MDD_EUR_PGC2025.genes.raw
+    ldsc: true             # run S-LDSC for this trait (set false for non-European / trans-ancestry GWAS)
+    n: null                # constant sample size if the file has no N column (LDSC only)
+    format: table          # table | vcf (IEU OpenGWAS GWAS-VCF: FORMAT ES:SE:...:AF)
+    # Optional per-trait scPagwas settings (override the scpagwas: block), e.g.
+    # scpagwas: {maf_filter: 0.01, marg: 20000, pcc_method: Corr_Random, bg_n_topgenes: 500}
+    # Per-trait overrides of gwas_columns (only the fields that differ), e.g.
+    # columns: {chrom: CHR, pos: BP, rsid: SNP, beta: null, or: OR, se: SE, p: P, eaf: FRQ}
+    columns: {}
+
+# Default column names for format: table (PGC style shown).
+# a1 / a2 / n are only used by LDSC (a1 = effect allele; n = per-SNP sample size).
+# Set a field to null if the column is absent. Required: chrom, pos, rsid,
+# (beta or or) and (se or p), plus one allele-frequency source:
+# maf -> eaf -> (fcas, fcon, ncas, ncon) = case/control-size-weighted frequency.
+gwas_columns:
+  chrom: "#CHROM"
+  pos: POS
+  rsid: ID
+  a1: EA
+  a2: NEA
+  n: NEFF
+  beta: BETA
+  or: null
+  se: SE
+  p: PVAL
+  maf: null
+  eaf: null
+  fcas: FCAS
+  fcon: FCON
+  ncas: NCAS
+  ncon: NCON
+
+gwas_filter:
+  autosomes_only: true
+  min_maf: 0.01
+  # Extended MHC. Coordinates must match the GWAS genome build
+  # (GRCh37: chr6 25-35 Mb; GRCh38: chr6 ~28.5-33.5 Mb).
+  exclude_region: {chrom: 6, start: 25000000, end: 35000000}
+
+# ---------------------------------------------------------------------
+# 3. scPagwas
+# ---------------------------------------------------------------------
+scpagwas:
+  # Names of scPagwas built-in data objects, or paths to .rds files.
+  pathway_list: Genes_by_pathway_kegg
+  # Gene coordinates MUST match the GWAS genome build:
+  #   block_annotation_hg37  for GRCh37 / hg19 GWAS
+  #   block_annotation       for GRCh38 / hg38 GWAS
+  block_annotation: block_annotation_hg37
+  chrom_ld: chrom_ld
+  maf_filter: 0.1          # GWAS_summary_input
+  marg: 10000              # SnpToGene window (bp)
+  n_chunks: 1              # ~8,000 cells -> one chunk
+  # scGet_PCC             : PCC over all cells; top / bottom n_topgenes -> TRS / downTRS (default)
+  # Corr_Random_topbottom : random-subset PCC (memory-light); top / bottom -> TRS / downTRS
+  # Corr_Random           : random-subset PCC with separate up / down sets -> TRS / upTRS / downTRS
+  pcc_method: scGet_PCC
+  n_topgenes: 500
+  bg_n_topgenes: 1000      # Get_CorrectBg_p control-gene set size
+  iters_singlecell: 100    # Get_CorrectBg_p iterations
+  corr_nrandom: 5          # Corr_Random only
+  corr_nselect: 200        # Corr_Random only
+  seed: 1234
+  run_celltype_bootstrap: true
+  bootstrap_iters: 200
+  bootstrap_part: 0.5
+  save_seurat: false       # also save the Seurat object with scPagwas scores (large)
+
+# ---------------------------------------------------------------------
+# 4. scDRS (driven by MAGMA gene-level P values)
+# ---------------------------------------------------------------------
+magma:
+  binary: references/magma/magma
+  gene_id: auto            # auto | entrez | symbol  (GENE column of .genes.out)
+  # MAGMA gene location file used for Entrez -> symbol mapping
+  # (e.g. NCBI37.3.gene.loc from the MAGMA website). Needed for Entrez IDs.
+  # Also used for Entrez IDs in the MAGMA covariate file and, by default, for the
+  # LDSC gene coordinates. Use the build of your GWAS (NCBI37.3 = GRCh37).
+  gene_loc: references/magma/NCBI37.3.gene.loc
+
+scdrs:
+  weight: zscore
+  n_max: 1000              # top MAGMA genes in the disease gene set
+  n_ctrl: 1000             # matched control gene sets
+  cov_cols: []             # e.g. [nCount_RNA, batch]; categorical -> one-hot
+  # KNN graph for the heterogeneity test. null -> scDRS default (20 PCs, k = 15).
+  # Or the name of a (batch-corrected) Seurat reduction, e.g. harmony.
+  neighbors_reduction: null
+  n_neighbors: 15
+
+# ---------------------------------------------------------------------
+# 5. S-LDSC (LDSC-SEG). Reference files: see docs/references.md
+#    Prefixes end right before the chromosome number (e.g. ".../baselineLD.").
+# ---------------------------------------------------------------------
+ldsc:
+  env_activate: "source ~/miniconda3/etc/profile.d/conda.sh && conda activate ldsc"   # <-- EDIT if needed
+  software_dir: references/ldsc
+  plink_prefix: references/ldsc_ref/1000G_EUR_Phase3_plink/1000G.EUR.QC.
+  baseline_prefix: references/ldsc_ref/baseline_LD_v2.2/baselineLD.
+  frq_prefix: references/ldsc_ref/1000G_Phase3_frq/1000G.EUR.QC.
+  weights_prefix: references/ldsc_ref/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC.
+  hm3_snplist: references/ldsc_ref/w_hm3.snplist
+  gene_coord_file: null    # GENE CHR START END; null -> derived from magma.gene_loc
+  window_kb: 100           # gene +/- window for the annotation
+  top_pct: 10              # top % most specific genes per cell type (LDSC gene sets)
+
+integration:
+  alpha: 0.05              # raw P threshold used to colour the integrated figure
+
+# ---------------------------------------------------------------------
+# 6. Resources per rule: mem in GB, time in minutes, cpus.
+#    Sized for ~300k cells; see docs/parameters.md for scaling.
+# ---------------------------------------------------------------------
+resources:
+  default:            {mem_gb: 4,   time_min: 60,  cpus: 1}
+  gwas_format:        {mem_gb: 8,   time_min: 60,  cpus: 1}
+  sc_prep:            {mem_gb: 16,  time_min: 120, cpus: 1}
+  scpagwas_gwas_prep: {mem_gb: 16,  time_min: 120, cpus: 1}
+  scpagwas_chunk:     {mem_gb: 32,  time_min: 240, cpus: 1}
+  scpagwas_finalize:  {mem_gb: 16,  time_min: 120, cpus: 1}
+  scpagwas_celltype:  {mem_gb: 32,  time_min: 240, cpus: 1}
+  export_counts:      {mem_gb: 8,   time_min: 30,  cpus: 1}
+  build_h5ad:         {mem_gb: 8,   time_min: 30,  cpus: 1}
+  scdrs_score:        {mem_gb: 16,  time_min: 120, cpus: 2}
+  scdrs_downstream:   {mem_gb: 16,  time_min: 60,  cpus: 2}
+  summarize:          {mem_gb: 4,   time_min: 30,  cpus: 1}
+  celltype_specificity: {mem_gb: 16, time_min: 60, cpus: 1}
+  magma_covar:        {mem_gb: 4,   time_min: 30,  cpus: 1}
+  ldsc_munge:         {mem_gb: 16,  time_min: 60,  cpus: 1}
+  ldsc_l2:            {mem_gb: 8,   time_min: 240, cpus: 1}
+  ldsc_h2:            {mem_gb: 16,  time_min: 480, cpus: 4}

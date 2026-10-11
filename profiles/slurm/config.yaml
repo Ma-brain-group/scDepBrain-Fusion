@@ -1,0 +1,23 @@
+# Snakemake 7 profile: submit every rule as its own SLURM job.
+# Partition / account are taken from the standard sbatch environment variables,
+# so nothing site-specific is hard-coded here:
+#   export SBATCH_PARTITION=<partition>
+#   export SBATCH_ACCOUNT=<account>      # if your cluster requires one
+# Per-rule memory / time / cpus come from `resources:` in the config file.
+cluster: >-
+  mkdir -p logs/slurm &&
+  sbatch --parsable
+  -c {threads}
+  --mem={resources.mem_mb}M
+  -t {resources.runtime}
+  -J smk_{rule}
+  -o logs/slurm/{rule}_{wildcards}_%j.out
+  -e logs/slurm/{rule}_{wildcards}_%j.err
+cluster-cancel: scancel
+jobs: 30
+latency-wait: 180
+max-jobs-per-second: 2
+restart-times: 0
+rerun-incomplete: true
+keep-going: true
+printshellcmds: true
