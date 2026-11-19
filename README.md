@@ -252,7 +252,8 @@ docs/                        detailed documentation
 
 - [scDepBrain](https://github.com/Ma-brain-group/scDepBrain)  
 - [scDepBrain-Map](https://scdepbrain.su-lab.org/)
-
+- [scDepBrain-Fusion](https://github.com/Ma-brain-group/scDepBrain-Fusion)
+- [scDepBrain Zenodo DOI](https://zenodo.org/records/24354889)
 
 ## Citations
 
