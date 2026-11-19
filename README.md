@@ -1,6 +1,6 @@
 # scDepBrain-Fusion
 
-**Map GWAS signals to cell types with four complementary methods (MAGMA, S-LDSC, scPagwas and scDRS) and combine them into one cell-type ranking, in a single Snakemake workflow.**
+**Mapping GWAS genetic signals to cell types using four complementary methods (scPagwas, scDRS, LDSC-SEG, and MAGMA-CellTyping) and combine them into one cell-type ranking, in a single Snakemake workflow.**
 
 You provide:
 
@@ -14,7 +14,7 @@ For every trait and every annotation level (e.g. major cell types and subtypes),
 
 | Method | Signal used | Cell-type statistic |
 |---|---|---|
-| **MAGMA** gene-property analysis ([de Leeuw 2015](https://doi.org/10.1371/journal.pcbi.1004219)) | gene-level GWAS association | association with continuous cell-type specificity (`--gene-covar`) |
+| **MAGMA/MAGMA-CellTyping** gene-property analysis ([de Leeuw 2015](https://doi.org/10.1371/journal.pcbi.1004219)) | gene-level GWAS association | association with continuous cell-type specificity (`--gene-covar`) |
 | **S-LDSC / LDSC-SEG** ([Finucane 2018](https://doi.org/10.1038/s41588-018-0081-4)) | SNP heritability | heritability enrichment around the top 10% specific genes (coefficient P) |
 | **scPagwas** ([Ma 2023](https://doi.org/10.1016/j.xgen.2023.100383)) | pathway activity × GWAS, per cell | `Merge_celltype_p` of per-cell P values (plus cell-type bootstrap) |
 | **scDRS** ([Zhang 2022](https://doi.org/10.1038/s41588-022-01167-z)) | disease gene set, per cell | group association (Monte Carlo P) |
@@ -41,7 +41,7 @@ scDepBrain-Fusion was built for the MDD × human-brain analysis of the scDepBrai
 10. [Citation](#citation) · [License](#license)
 
 Detailed documentation lives in [`docs/`](docs/):
-[inputs](docs/inputs.md) · [references (MAGMA / LDSC)](docs/references.md) · [parameters](docs/parameters.md) · [outputs](docs/outputs.md) · [methods](docs/methods.md) · [troubleshooting](docs/troubleshooting.md)
+[inputs](docs/inputs.md) · [references (MAGMA-CellTyping / LDSC-SEG)](docs/references.md) · [parameters](docs/parameters.md) · [outputs](docs/outputs.md) · [methods](docs/methods.md) · [troubleshooting](docs/troubleshooting.md)
 
 ---
 
@@ -81,7 +81,7 @@ flowchart LR
 
 ## Installation
 
-Requirements: Linux or macOS, [conda](https://docs.conda.io/) or [mamba](https://mamba.readthedocs.io/), about 10 GB of disk for the environments, and the MAGMA / LDSC references ([docs/references.md](docs/references.md)).
+Requirements: Linux or macOS, [conda](https://docs.conda.io/) or [mamba](https://mamba.readthedocs.io/), about 10 GB of disk for the environments, and the MAGMA-CellTyping / LDSC-SEG references ([docs/references.md](docs/references.md)).
 
 ```bash
 git clone https://github.com/<your-account>/scDepBrain-Fusion.git
@@ -196,7 +196,7 @@ logs/                                one log per step
 - **(k/n)**: k of the n available methods are significant.
 
 The methods answer slightly different questions:
-- MAGMA and LDSC test whether the cell type's **specific genes** carry GWAS signal, at gene level and heritability level respectively.
+- MAGMA-CellTyping and LDSC-SEG test whether the cell type's **specific genes** carry GWAS signal, at gene level and heritability level respectively.
 - scPagwas and scDRS score **individual cells**.
 
 Agreement across methods is the most robust evidence. The integration is a summary of nominal P values, not a formal meta-analysis; report the individual P values with multiple-testing correction as well.
@@ -214,14 +214,14 @@ Known caveats:
 | 8,000 cells (demo) | ~25 GB (8 parallel jobs; each < 15 GB) | ~80 min on 8 cores |
 | ~300,000 cells | scPagwas chunks 200–400 GB, finalize ≤ 800 GB, scDRS ≤ 600 GB | 1–3 days on a cluster |
 
-MAGMA and LDSC are light: LDSC needs about 8 GB per chromosome job and runs one regression per cell type. Set per-rule memory and time under `resources:` ([docs/parameters.md](docs/parameters.md#scaling-resources)).
+MAGMA-CellTyping and LDSC-SEG are light: LDSC-SEG needs about 8 GB per chromosome job and runs one regression per cell type. Set per-rule memory and time under `resources:` ([docs/parameters.md](docs/parameters.md#scaling-resources)).
 
 ---
 
 ## Method notes
 
 - **Default scPagwas settings** reproduce our lab's original workflow: `block_annotation_hg37`, `maf_filter = 0.1`, `marg = 10 kb`, KEGG pathways, `scGet_PCC`, top / bottom 500 genes, `Get_CorrectBg_p(iters = 100, n_topgenes = 1000)`.
-- **Specificity** (MAGMA and LDSC) follows Bryois et al. 2020: mean expression per cell type divided by its sum over cell types. It is computed once per annotation level from the Seurat object.
+- **Specificity** (MAGMA-CellTyping and LDSC-SEG) follows Bryois et al. 2020: mean expression per cell type divided by its sum over cell types. It is computed once per annotation level from the Seurat object.
 - **scDRS gets true raw counts** (checked); `SeuratDisk::Convert` is not used.
 - **Genome build.** Use GRCh37 references throughout for GRCh37 GWAS: MAGMA gene.loc, LDSC panel, `block_annotation_hg37`.
 
@@ -238,7 +238,7 @@ config/                      config_template.yaml (annotated), config_example.ya
 profiles/local, profiles/slurm   Snakemake execution profiles
 scripts/                     one script per step (R / Python / bash)
 envs/                        conda environment + R install script
-references/                  MAGMA / LDSC files (not tracked; see docs/references.md)
+references/                  MAGMA-CellTyping / LDSC-SEG files (not tracked; see docs/references.md)
 example/data/                demo Seurat object, MAGMA results, gwas/ download folder
 example/expected_output/     reference demo outputs
 example/build/               how the demo object was made
@@ -251,11 +251,11 @@ docs/                        detailed documentation
 
 If you use this pipeline, please cite the methods it wraps:
 
+- Ma Y, *et al.* Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequencing data. *Cell Genomics* 3, 100383 (2023).
+- Zhang MJ, *et al.* Polygenic enrichment distinguishes disease associations of individual cells in single-cell RNA-seq data. *Nature Genetics* 54, 1572–1580 (2022).
 - de Leeuw CA, *et al.* MAGMA: generalized gene-set analysis of GWAS data. *PLoS Comput Biol* 11, e1004219 (2015).
 - Finucane HK, *et al.* Heritability enrichment of specifically expressed genes identifies disease-relevant tissues and cell types. *Nat Genet* 50, 621–629 (2018).
-- Bryois J, *et al.* Genetic identification of cell types underlying brain complex traits yields insights into the etiology of Parkinson's disease. *Nat Genet* 52, 482–493 (2020).
-- Ma Y, *et al.* Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequencing data. *Cell Genomics* 3, 100383 (2023).
-- Zhang MJ, *et al.* Polygenic enrichment distinguishes disease associations of individual cells in single-cell RNA-seq data. *Nat Genet* 54, 1572–1580 (2022).
+- Bryois J, *et al.* Genetic identification of cell types underlying brain complex traits yields insights into the etiology of Parkinson's disease. *Nature Genetics* 52, 482–493 (2020).
 - Mölder F, *et al.* Sustainable data analysis with Snakemake. *F1000Research* 10, 33 (2021).
 
 For the demo GWAS: Adams MJ, *et al.* (Major Depressive Disorder Working Group of the Psychiatric Genomics Consortium). *Cell* (2025).
