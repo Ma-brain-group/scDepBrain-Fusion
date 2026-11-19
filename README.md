@@ -1,36 +1,6 @@
 # scDepBrain-Fusion
 
-<<<<<<< Updated upstream
-
 **Mapping GWAS genetic signals to cell types using four complementary methods (scPagwas, scDRS, LDSC-SEG, and MAGMA-CellTyping) and combine them into one cell-type ranking, in a single Snakemake workflow.**
-=======
-**Map GWAS signals to cell types with four complementary methods (MAGMA, S-LDSC, scPagwas and scDRS) and combine them into one cell-type ranking, in a single Snakemake workflow.**
-##contig=<ID=chr1,length=248956422,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-lygen
-##contig=<ID=chr10,length=133797422,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr11,length=135086622,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr12,length=133275309,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr13,length=114364328,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr14,length=107043718,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr15,length=101991189,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr16,length=90338345,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr17,length=83257441,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr18,length=80373285,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr19,length=58617616,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr2,length=242193529,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr20,length=64444167,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr21,length=46709983,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr22,length=50818468,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr3,length=198295559,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr4,length=190214555,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr5,length=181538259,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr6,length=170805979,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr7,length=159345973,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr7_KI270803v1_alt,length=1111570,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr8,length=145138636,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr8_KI270821v1_alt,length=985506,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
-##contig=<ID=chr9,length=138394717,assembly=GRCh38_full_analysis_set_plus_decoy_hla.fa>
->>>>>>> Stashed changes
 
 You provide:
 
