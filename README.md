@@ -20,11 +20,11 @@ For every trait and every annotation level (e.g. major cell types and subtypes),
 | **scPagwas** ([Ma 2023](https://doi.org/10.1016/j.xgen.2023.100383)) | pathway activity × GWAS, per cell | `Merge_celltype_p` of per-cell P values (plus cell-type bootstrap) |
 | **scDRS** ([Zhang 2022](https://doi.org/10.1038/s41588-022-01167-z)) | disease gene set, per cell | group association (Monte Carlo P) |
 
-It then **integrates** them. For each cell type the integration reports the mean −log10(P) across the available methods and which methods reach nominal significance, as a table and a bar chart:
+It then **integrates** them. For each cell type the integration reports the mean −log10(P) across the available methods and which methods reach nominal significance, as a table and a bar chart (This plot was generated using a small demonstration dataset for illustrative purposes only):
 
 ![integrated figure](example/expected_output/four_method_final_anno.png)
 
-scDepBrain-Fusion was built for the MDD × human-brain analysis of the scDepBrain project and works for any trait, tissue, or human single-cell dataset. MAGMA and LDSC can each be switched off if you don't have their reference files.
+scDepBrain-Fusion was built for the MDD × human-brain analysis of the scDepBrain project and works for any trait, tissue, or human single-cell dataset. MAGMA-CellTyping and LDSC-SEG can each be switched off if you don't have their reference files.
 
 ---
 
@@ -248,7 +248,13 @@ docs/                        detailed documentation
 
 ---
 
-## Citation
+## scDepBrain links
+
+- [scDepBrain](https://github.com/Ma-brain-group/scDepBrain)  
+- [scDepBrain-Map](https://scdepbrain.su-lab.org/)
+
+
+## Citations
 
 If you use this pipeline, please cite the methods it wraps:
 
@@ -261,6 +267,15 @@ If you use this pipeline, please cite the methods it wraps:
 
 For the demo GWAS: Adams MJ, *et al.* (Major Depressive Disorder Working Group of the Psychiatric Genomics Consortium). *Cell* (2025).
 
+## Other relevant tools
+
+- [scMORE](https://github.com/Ma-brain-group/scMORE)
+- [scRBP](https://github.com/Ma-brain-group/scRBP)
+- [scPagwas](https://github.com/Ma-brain-group/scPagwas)
+- [scHOB](https://github.com/Ma-brain-group/scHOB) OR [website](https://schob.su-lab.org/)
+- [scBPS](https://github.com/Ma-brain-group/scBPS)
+
+
 ## License
 
-[MIT](LICENSE). Third-party tools (MAGMA, LDSC, scPagwas, scDRS) and the GWAS / reference data keep their own licenses and terms of use.
+[MIT](LICENSE). Third-party tools (MAGMA-CellTyping, LDSC-SEG, scPagwas, scDRS) and the GWAS / reference data keep their own licenses and terms of use.
