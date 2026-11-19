@@ -1,5 +1,6 @@
 # scDepBrain-Fusion
 
+
 **Mapping GWAS genetic signals to cell types using four complementary methods (scPagwas, scDRS, LDSC-SEG, and MAGMA-CellTyping) and combine them into one cell-type ranking, in a single Snakemake workflow.**
 
 You provide:
