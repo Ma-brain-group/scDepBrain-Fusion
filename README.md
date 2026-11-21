@@ -259,11 +259,11 @@ docs/                        detailed documentation
 If you use this pipeline, please cite the methods it wraps:
 
 - Ma Y, *et al.* Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequencing data. [Cell Genomics](https://www.cell.com/cell-genomics/fulltext/S2666-979X(23)00180-5?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2666979X23001805%3Fshowall%3Dtrue) 3, 100383 (2023).
-- Zhang MJ, *et al.* Polygenic enrichment distinguishes disease associations of individual cells in single-cell RNA-seq data. [Nature Genetics(https://www.nature.com/articles/s41588-022-01167-z) 54, 1572–1580 (2022).
+- Zhang MJ, *et al.* Polygenic enrichment distinguishes disease associations of individual cells in single-cell RNA-seq data. [Nature Genetics](https://www.nature.com/articles/s41588-022-01167-z) 54, 1572–1580 (2022).
 - de Leeuw CA, *et al.* MAGMA: generalized gene-set analysis of GWAS data. [PLoS Computational Biololgy](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004219) 11, e1004219 (2015).
 - Finucane HK, *et al.* Heritability enrichment of specifically expressed genes identifies disease-relevant tissues and cell types. [Nature Genetics](https://www.nature.com/articles/s41588-018-0081-4) 50, 621–629 (2018).
 - Bryois J, *et al.* Genetic identification of cell types underlying brain complex traits yields insights into the etiology of Parkinson's disease. [Nature Genetics](https://www.nature.com/articles/s41588-020-0610-9) 52, 482–493 (2020).
-- Mölder F, *et al.* Sustainable data analysis with Snakemake. [F1000Research(https://f1000research.com/articles/10-33/v3) 10, 33 (2021).
+- Mölder F, *et al.* Sustainable data analysis with Snakemake. [F1000Research](https://f1000research.com/articles/10-33/v3) 10, 33 (2021).
 
 For the demo GWAS: Adams MJ, *et al.* *(Major Depressive Disorder Working Group of the Psychiatric Genomics Consortium)* Trans-ancestry genome-wide study of depression identifies 697 associations implicating cell types and pharmacotherapies [Cell](https://www.cell.com/cell/fulltext/S0092-8674(24)01415-6) (2025).
 
