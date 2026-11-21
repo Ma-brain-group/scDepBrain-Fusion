@@ -272,7 +272,7 @@ For the demo GWAS: Adams MJ, *et al.* (Major Depressive Disorder Working Group o
 - [scMORE](https://github.com/Ma-brain-group/scMORE)
 - [scRBP](https://github.com/Ma-brain-group/scRBP)
 - [scPagwas](https://github.com/Ma-brain-group/scPagwas)
-- [scHOB](https://github.com/Ma-brain-group/scHOB) OR [website](https://schob.su-lab.org/)
+- [scHOB github](https://github.com/Ma-brain-group/scHOB) OR [scHOB website](https://schob.su-lab.org/)
 - [scBPS](https://github.com/Ma-brain-group/scBPS)
 
 
